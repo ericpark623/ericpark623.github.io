@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eric Park — Data Scientist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Archivo:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#F0EDE8;
+  --ink:#0A0A0A;
+  --ink2:#4A4A44;
+  --ink3:#8A8A84;
+  --border:#0A0A0A;
+  --accent:#D94F2B;
+  --surface:#E4E0DA;
+}
+body{font-family:'Archivo',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+section{display:none;}
+section.active{display:block;}
+
+/* NAV */
+nav{
+  display:flex;align-items:stretch;
+  border-bottom:2px solid var(--border);
+  background:var(--bg);
+  position:sticky;top:0;z-index:100;
+}
+.nav-id{
+  font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
+  padding:0 1.5rem;
+  display:flex;align-items:center;
+  border-right:2px solid var(--border);
+  white-space:nowrap;
+  cursor:pointer;
+}
+.nav-links{display:flex;flex:1;}
+.nav-links a{
+  font-family:'Space Mono',monospace;font-size:11px;
+  letter-spacing:0.1em;text-transform:uppercase;
+  padding:1rem 1.25rem;
+  display:flex;align-items:center;
+  border-right:1px solid #ccc;
+  text-decoration:none;color:var(--ink2);
+  cursor:pointer;transition:background 0.1s,color 0.1s;
+}
+.nav-links a:hover,
+.nav-links a.active{background:var(--ink);color:var(--bg);}
+
+/* HOME */
+.home-grid{display:grid;grid-template-columns:1fr 1fr;border-bottom:2px solid var(--border);}
+.home-left{
+  padding:4rem 3rem 4rem;
+  border-right:2px solid var(--border);
+}
+.home-right{
+  display:flex;flex-direction:column;
+}
+.eyebrow{
+  font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--ink3);margin-bottom:1.5rem;
+}
+h1{
+  font-family:'Archivo',sans-serif;
+  font-size:clamp(3rem,5vw,4.5rem);
+  font-weight:900;line-height:0.95;
+  letter-spacing:-0.03em;
+  margin-bottom:2rem;
+  text-transform:uppercase;
+}
+h1 span{color:var(--accent);}
+.home-desc{
+  font-size:14px;line-height:1.75;color:var(--ink2);
+  max-width:400px;margin-bottom:2.5rem;
+}
+.btn-row{display:flex;gap:0;flex-wrap:wrap;}
+.btn{
+  font-family:'Space Mono',monospace;font-size:11px;
+  letter-spacing:0.12em;text-transform:uppercase;
+  padding:0.75rem 1.5rem;
+  border:2px solid var(--ink);
+  cursor:pointer;text-decoration:none;color:var(--ink);
+  transition:all 0.1s;display:inline-block;
+}
+.btn:hover,.btn-solid{background:var(--ink);color:var(--bg);}
+.btn-solid:hover{background:var(--accent);border-color:var(--accent);}
+.btn+.btn{border-left:none;}
+
+.stat-block{
+  padding:2rem 1.5rem;
+  border-bottom:2px solid var(--border);
+  display:flex;flex-direction:column;gap:4px;
+}
+.stat-block:last-child{border-bottom:none;flex:1;}
+.stat-n{
+  font-family:'Archivo',sans-serif;font-size:3rem;
+  font-weight:900;line-height:1;letter-spacing:-0.04em;
+}
+.stat-n span{color:var(--accent);}
+.stat-l{
+  font-family:'Space Mono',monospace;font-size:9px;
+  letter-spacing:0.2em;text-transform:uppercase;color:var(--ink3);
+}
+
+/* SECTION HEADER */
+.sec-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 2rem;border-bottom:2px solid var(--border);
+  background:var(--ink);color:var(--bg);
+}
+.sec-title{
+  font-family:'Space Mono',monospace;font-size:11px;
+  letter-spacing:0.2em;text-transform:uppercase;
+}
+.sec-count{font-family:'Space Mono',monospace;font-size:10px;opacity:0.5;}
+
+/* PROJECTS */
+.proj-table{width:100%;border-collapse:collapse;}
+.proj-table tr{border-bottom:1px solid #ccc;cursor:pointer;transition:background 0.1s;}
+.proj-table tr:hover td{background:var(--surface);}
+.proj-table td{padding:1.25rem 2rem;vertical-align:middle;}
+.proj-num{
+  font-family:'Space Mono',monospace;font-size:10px;
+  color:var(--ink3);width:40px;
+}
+.proj-name{
+  font-family:'Archivo',sans-serif;font-weight:700;
+  font-size:15px;letter-spacing:-0.01em;
+  width:220px;
+}
+.proj-desc{font-size:13px;color:var(--ink2);line-height:1.5;}
+.proj-tags{
+  display:flex;gap:6px;flex-wrap:wrap;
+  justify-content:flex-end;width:200px;
+}
+.tag{
+  font-family:'Space Mono',monospace;font-size:9px;
+  letter-spacing:0.08em;text-transform:uppercase;
+  border:1px solid #bbb;padding:3px 7px;
+  color:var(--ink2);
+}
+.proj-link{
+  font-family:'Space Mono',monospace;font-size:12px;
+  color:var(--ink3);width:30px;text-align:right;
+  transition:color 0.1s;
+}
+.proj-table tr:hover .proj-link{color:var(--accent);}
+
+/* VIZ SECTION */
+.viz-wrap{padding:2rem;}
+.viz-title{
+  font-family:'Archivo',sans-serif;font-weight:900;
+  font-size:1.4rem;letter-spacing:-0.02em;
+  text-transform:uppercase;margin-bottom:0.25rem;
+}
+.viz-sub{font-size:12px;color:var(--ink3);font-family:'Space Mono',monospace;margin-bottom:1.5rem;}
+
+.chart-area{position:relative;height:260px;background:var(--surface);border:1px solid #ccc;margin-bottom:1.5rem;}
+
+.filter-row{display:flex;gap:0;margin-bottom:1.5rem;}
+.filter-btn{
+  font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:0.1em;text-transform:uppercase;
+  padding:0.5rem 1rem;border:1px solid #bbb;
+  background:transparent;color:var(--ink2);cursor:pointer;
+  transition:all 0.1s;
+}
+.filter-btn+.filter-btn{border-left:none;}
+.filter-btn.on{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+
+.bars-wrap{display:flex;align-items:flex-end;gap:2px;height:100%;padding:1.5rem 1rem 2rem;}
+.bar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:4px;height:100%;justify-content:flex-end;}
+.bar{
+  width:100%;background:var(--ink);transition:height 0.4s cubic-bezier(0.4,0,0.2,1),background 0.2s;
+  cursor:pointer;position:relative;
+}
+.bar:hover{background:var(--accent);}
+.bar-lbl{
+  font-family:'Space Mono',monospace;font-size:8px;
+  color:var(--ink3);text-align:center;letter-spacing:0.05em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;
+}
+.bar-val{
+  font-family:'Space Mono',monospace;font-size:9px;
+  color:var(--ink2);text-align:center;
+}
+
+.skills-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+  gap:0;border:1px solid #ccc;
+}
+.skill-cell{
+  padding:0.75rem 1rem;border:1px solid #eee;
+  font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:0.08em;text-transform:uppercase;color:var(--ink2);
+  transition:background 0.1s;
+}
+.skill-cell:hover{background:var(--ink);color:var(--bg);}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:300px 1fr;min-height:70vh;}
+.about-left-col{
+  border-right:2px solid var(--border);
+  padding:2.5rem 2rem;
+  display:flex;flex-direction:column;gap:1.5rem;
+}
+.about-handle{
+  font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:0.2em;text-transform:uppercase;color:var(--ink3);
+  margin-bottom:0.5rem;
+}
+.about-name-big{
+  font-family:'Archivo',sans-serif;font-weight:900;
+  font-size:1.75rem;letter-spacing:-0.03em;text-transform:uppercase;
+  line-height:1;
+}
+.about-name-big span{color:var(--accent);}
+.about-links-block{display:flex;flex-direction:column;gap:0;border:1px solid #ccc;}
+.about-link{
+  font-family:'Space Mono',monospace;font-size:10px;
+  letter-spacing:0.1em;padding:0.6rem 0.75rem;
+  border-bottom:1px solid #ddd;color:var(--ink2);
+  text-decoration:none;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;
+  transition:background 0.1s,color 0.1s;
+}
+.about-link:last-child{border-bottom:none;}
+.about-link:hover{background:var(--ink);color:var(--bg);}
+.about-right-col{padding:3rem;}
+.about-quote{
+  font-family:'Archivo',sans-serif;font-weight:900;
+  font-size:2rem;letter-spacing:-0.03em;text-transform:uppercase;
+  line-height:1.05;margin-bottom:2rem;
+}
+.about-quote span{color:var(--accent);}
+.about-body{
+  font-size:14px;line-height:1.85;color:var(--ink2);max-width:540px;
+  margin-bottom:2.5rem;
+}
+.about-sub{
+  font-family:'Space Mono',monospace;font-size:9px;
+  letter-spacing:0.2em;text-transform:uppercase;color:var(--ink3);
+  margin-bottom:0.75rem;
+}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;min-height:70vh;}
+.contact-left{
+  padding:4rem 3rem;border-right:2px solid var(--border);
+}
+.contact-right{padding:4rem 3rem;}
+.contact-h{
+  font-family:'Archivo',sans-serif;font-weight:900;
+  font-size:3rem;letter-spacing:-0.04em;text-transform:uppercase;
+  line-height:0.95;margin-bottom:1rem;
+}
+.contact-h span{color:var(--accent);}
+.contact-sub{font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:2.5rem;max-width:320px;}
+.contact-methods{display:flex;flex-direction:column;gap:0;border:1px solid #ccc;}
+.contact-method{
+  padding:1rem;border-bottom:1px solid #ddd;
+  display:flex;flex-direction:column;gap:3px;
+}
+.contact-method:last-child{border-bottom:none;}
+.cm-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink3);}
+.cm-val{font-size:13px;color:var(--ink);}
+.form-group{margin-bottom:1.25rem;}
+.form-lbl{
+  font-family:'Space Mono',monospace;font-size:9px;
+  letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--ink3);display:block;margin-bottom:6px;
+}
+.form-inp,.form-ta{
+  width:100%;background:transparent;
+  border:none;border-bottom:2px solid var(--border);
+  padding:0.5rem 0;font-size:14px;color:var(--ink);
+  font-family:'Archivo',sans-serif;outline:none;
+  transition:border-color 0.2s;
+}
+.form-inp:focus,.form-ta:focus{border-color:var(--accent);}
+.form-ta{resize:none;min-height:100px;}
+
+.toast{
+  position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(8px);
+  background:var(--ink);color:var(--bg);
+  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.1em;
+  padding:0.75rem 1.5rem;opacity:0;pointer-events:none;
+  transition:all 0.3s;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-id" onclick="show('home')">EP</div>
+  <div class="nav-links">
+    <a onclick="show('home')" id="nav-home" class="active">Index</a>
+    <a onclick="show('projects')" id="nav-projects">Projects</a>
+    <a onclick="show('viz')" id="nav-viz">Data</a>
+    <a onclick="show('about')" id="nav-about">About</a>
+    <a onclick="show('contact')" id="nav-contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HOME -->
+<section id="home" class="active">
+  <div class="home-grid">
+    <div class="home-left">
+      <div class="eyebrow">Data Scientist — Seoul / San Diego</div>
+      <h1>Eric<br><span>Park</span></h1>
+      <p class="home-desc">I build machine learning systems that find signal in noise — from predicting NBA defensive performance to understanding what makes anime recommendations actually work.</p>
+      <div class="btn-row">
+        <a class="btn btn-solid" onclick="show('projects')">Projects</a>
+        <a class="btn" href="https://github.com/ericpark623" target="_blank">GitHub ↗</a>
+        <a class="btn" onclick="show('contact')">Contact</a>
+      </div>
+    </div>
+    <div class="home-right">
+      <div class="stat-block">
+        <div class="stat-n">3<span>+</span></div>
+        <div class="stat-l">Public repos</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-n"><span>#</span>1</div>
+        <div class="stat-l">Interest: sports + ML</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-n">∞</div>
+        <div class="stat-l">Anime watched</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-head">
+    <div class="sec-title">Featured projects</div>
+    <div class="sec-count" style="cursor:pointer;" onclick="show('projects')">view all →</div>
+  </div>
+  <table class="proj-table">
+    <tr onclick="window.open('https://github.com/ericpark623/NBA-DPOY','_blank')">
+      <td class="proj-num">01</td>
+      <td class="proj-name">NBA DPOY Predictor</td>
+      <td class="proj-desc">Predicting the NBA Defensive Player of the Year award using historical player stats and advanced defensive metrics.</td>
+      <td class="proj-tags"><span class="tag">Python</span><span class="tag">ML</span><span class="tag">NBA</span></td>
+      <td class="proj-link">↗</td>
+    </tr>
+    <tr onclick="window.open('https://github.com/ericpark623/Anime-Recommender','_blank')">
+      <td class="proj-num">02</td>
+      <td class="proj-name">Anime Recommender</td>
+      <td class="proj-desc">Bayesian personal ranking + collaborative filtering to surface overlooked anime beyond popularity bias.</td>
+      <td class="proj-tags"><span class="tag">RecSys</span><span class="tag">Bayesian</span><span class="tag">MyAnimeList</span></td>
+      <td class="proj-link">↗</td>
+    </tr>
+  </table>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="sec-head">
+    <div class="sec-title">All projects</div>
+    <div class="sec-count">3 repos</div>
+  </div>
+  <table class="proj-table">
+    <tr onclick="window.open('https://github.com/ericpark623/NBA-DPOY','_blank')">
+      <td class="proj-num">01</td>
+      <td class="proj-name">NBA DPOY Predictor</td>
+      <td class="proj-desc">Predicting the NBA Defensive Player of the Year award using historical player stats and advanced defensive metrics. Classification model trained on multi-season data.</td>
+      <td class="proj-tags"><span class="tag">Python</span><span class="tag">Jupyter</span><span class="tag">ML</span><span class="tag">Sports</span></td>
+      <td class="proj-link">↗</td>
+    </tr>
+    <tr onclick="window.open('https://github.com/ericpark623/Anime-Recommender','_blank')">
+      <td class="proj-num">02</td>
+      <td class="proj-name">Anime Recommender</td>
+      <td class="proj-desc">Two-stage recommender system: collaborative filtering v1, then Bayesian personal ranking to fix popularity bias. Uses MyAnimeList user data.</td>
+      <td class="proj-tags"><span class="tag">RecSys</span><span class="tag">Bayesian</span><span class="tag">Collab Filter</span><span class="tag">MyAnimeList</span></td>
+      <td class="proj-link">↗</td>
+    </tr>
+    <tr onclick="window.open('https://github.com/ericpark623/Advent-of-Code-2024','_blank')">
+      <td class="proj-num">03</td>
+      <td class="proj-name">Advent of Code 2024</td>
+      <td class="proj-desc">Solutions to the 2024 Advent of Code puzzles, worked through in Python. Algorithmic problem solving, data structures.</td>
+      <td class="proj-tags"><span class="tag">Python</span><span class="tag">Algorithms</span><span class="tag">Puzzles</span></td>
+      <td class="proj-link">↗</td>
+    </tr>
+  </table>
+</section>
+
+<!-- VIZ -->
+<section id="viz">
+  <div class="sec-head">
+    <div class="sec-title">Data explorer</div>
+    <div class="sec-count">NBA defensive stats</div>
+  </div>
+  <div class="viz-wrap">
+    <div class="viz-title">DPOY Candidate Stats</div>
+    <div class="viz-sub">// interactive · hover bars for values · toggle metrics</div>
+
+    <div class="filter-row" id="metric-filters"></div>
+
+    <div class="chart-area" id="chart-area">
+      <div class="bars-wrap" id="bars"></div>
+    </div>
+
+    <div style="margin-top:2rem;">
+      <div class="sec-head" style="position:static;margin-bottom:0;border:1px solid #ccc;border-bottom:none;">
+        <div class="sec-title">Skills</div>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-cell">Python</div>
+        <div class="skill-cell">Pandas</div>
+        <div class="skill-cell">Scikit-learn</div>
+        <div class="skill-cell">PyTorch</div>
+        <div class="skill-cell">SQL</div>
+        <div class="skill-cell">NumPy</div>
+        <div class="skill-cell">Matplotlib</div>
+        <div class="skill-cell">Jupyter</div>
+        <div class="skill-cell">Bayesian Stats</div>
+        <div class="skill-cell">Rec Systems</div>
+        <div class="skill-cell">Git / GitHub</div>
+        <div class="skill-cell">R</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-left-col">
+      <div>
+        <div class="about-handle">@ericpark623</div>
+        <div class="about-name-big">Eric<br><span>Park</span></div>
+      </div>
+      <div class="about-links-block">
+        <a class="about-link" href="https://github.com/ericpark623" target="_blank">GitHub <span>↗</span></a>
+        <a class="about-link" onclick="show('contact')">Email <span>→</span></a>
+        <a class="about-link" onclick="show('projects')">Projects <span>→</span></a>
+      </div>
+    </div>
+    <div class="about-right-col">
+      <div class="about-quote">Data<br>scientist.<br><span>Sports fan.</span><br>Curious.</div>
+      <p class="about-body">
+        I'm Eric Park — a data scientist with a focus on machine learning, recommendation systems, and sports analytics. I'm interested in the intersection of rigorous statistical thinking and real-world messy data.
+        <br><br>
+        My projects range from predicting NBA defensive awards with classification models to building smarter anime recommenders that go beyond just recommending what's popular. I believe good models start with understanding the problem domain, not just tuning hyperparameters.
+        <br><br>
+        Currently building: more projects. Always learning.
+      </p>
+      <div class="about-sub">Interests</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0;border:1px solid #ccc;max-width:400px;">
+        <div class="skill-cell" style="border:1px solid #ddd;">Basketball</div>
+        <div class="skill-cell" style="border:1px solid #ddd;">Anime</div>
+        <div class="skill-cell" style="border:1px solid #ddd;">Probabilistic models</div>
+        <div class="skill-cell" style="border:1px solid #ddd;">Sports analytics</div>
+        <div class="skill-cell" style="border:1px solid #ddd;">Recommendation systems</div>
+        <div class="skill-cell" style="border:1px solid #ddd;">Competitive programming</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-left">
+      <div class="contact-h">Let's<br><span>talk.</span></div>
+      <p class="contact-sub">Open to collaborations, research projects, internships, or just talking data science and basketball.</p>
+      <div class="contact-methods">
+        <div class="contact-method">
+          <div class="cm-label">GitHub</div>
+          <div class="cm-val">github.com/ericpark623</div>
+        </div>
+        <div class="contact-method">
+          <div class="cm-label">Email</div>
+          <div class="cm-val">[ add your email ]</div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-right">
+      <div class="form-group">
+        <label class="form-lbl">Name</label>
+        <input class="form-inp" type="text" placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label class="form-lbl">Email</label>
+        <input class="form-inp" type="email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-lbl">Message</label>
+        <textarea class="form-ta" placeholder="What's on your mind?"></textarea>
+      </div>
+      <a class="btn btn-solid" onclick="sendMsg()" style="display:inline-block;">Send message →</a>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast">Message sent.</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+  if (id === 'viz') initViz();
+}
+
+const players = [
+  {name:'Rudy Gobert',blk:2.1,stl:0.9,dpws:4.2,defRtg:106.8},
+  {name:'Draymond Green',blk:0.8,stl:1.5,dpws:3.1,defRtg:107.2},
+  {name:'Bam Adebayo',blk:0.9,stl:1.3,dpws:3.8,defRtg:108.1},
+  {name:'Anthony Davis',blk:2.3,stl:1.1,dpws:4.5,defRtg:105.9},
+  {name:'Jaren Jackson',blk:3.0,stl:0.9,dpws:3.9,defRtg:106.4},
+  {name:'Brook Lopez',blk:2.5,stl:0.6,dpws:3.2,defRtg:107.8},
+];
+
+const metrics = [
+  {key:'blk',label:'Blocks/G'},
+  {key:'stl',label:'Steals/G'},
+  {key:'dpws',label:'Def Win Shares'},
+  {key:'defRtg',label:'Def Rating'},
+];
+
+let activeMetric = 'blk';
+let vizInited = false;
+
+function initViz() {
+  if (vizInited) return;
+  vizInited = true;
+  const fr = document.getElementById('metric-filters');
+  metrics.forEach(m => {
+    const b = document.createElement('button');
+    b.className = 'filter-btn' + (m.key === activeMetric ? ' on' : '');
+    b.textContent = m.label;
+    b.onclick = () => {
+      activeMetric = m.key;
+      document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      renderBars();
+    };
+    fr.appendChild(b);
+  });
+  renderBars();
+}
+
+function renderBars() {
+  const container = document.getElementById('bars');
+  container.innerHTML = '';
+  const vals = players.map(p => p[activeMetric]);
+  const isDefRtg = activeMetric === 'defRtg';
+  const maxV = Math.max(...vals);
+  const minV = isDefRtg ? Math.min(...vals) : 0;
+  const range = maxV - minV || 1;
+
+  players.forEach(p => {
+    const v = p[activeMetric];
+    const heightPct = isDefRtg
+      ? (1 - (v - minV) / range) * 75 + 10
+      : (v / maxV) * 80 + 5;
+
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+
+    const val = document.createElement('div');
+    val.className = 'bar-val';
+    val.textContent = v.toFixed(1);
+
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = heightPct + '%';
+    bar.title = p.name + ': ' + v;
+
+    const lbl = document.createElement('div');
+    lbl.className = 'bar-lbl';
+    lbl.textContent = p.name.split(' ')[1] || p.name;
+
+    col.appendChild(val);
+    col.appendChild(bar);
+    col.appendChild(lbl);
+    container.appendChild(col);
+  });
+}
+
+function sendMsg() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
